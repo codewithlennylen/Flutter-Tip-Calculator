@@ -49,6 +49,26 @@ class _MyHomePageState extends State<MyHomePage> {
   // Stores the Latest Value of the tip percentage calculated.
   double _tipPercentage = defaultTipPercentage;
 
+  //! Add Event Listeners
+  @override
+  void initState() {
+    super.initState();
+    _billAmountController.addListener(_onBillAmountChanged);
+    _tipPercentageController.addListener(_onTipAmountChanged);
+  }
+
+  _onBillAmountChanged() {
+    setState(() {
+      _billAmount = double.tryParse(_billAmountController.text) ?? 0.0;
+    });
+  }
+
+  _onTipAmountChanged() {
+    setState(() {
+      _tipPercentage = double.tryParse(_tipPercentageController.text) ?? 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 key: Key("billAmount"),
                 controller: _billAmountController,
                 //* keyboardType property enables us to show the required type of keyboard,
-                //* when the user taps on the input field. 
+                //* when the user taps on the input field.
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 //* Style our input fields
                 decoration: InputDecoration(
@@ -90,23 +110,25 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
-              SizedBox(height: 25,),
-              TextFormField(key: Key("tipPercentage"),
-              controller: _tipPercentageController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                hintText: 'Enter the Tip Percentage',
-                labelText: 'Tip Percentage',
-                labelStyle: TextStyle(
-                  fontSize: 25,
-                  letterSpacing: 1,
-                  fontWeight: FontWeight.bold
-                ),
-                fillColor: Colors.white,
-                border: new OutlineInputBorder(
-                  borderRadius: new BorderRadius.circular(20.0),
-                ),
+              SizedBox(
+                height: 25,
               ),
+              TextFormField(
+                key: Key("tipPercentage"),
+                controller: _tipPercentageController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: 'Enter the Tip Percentage',
+                  labelText: 'Tip Percentage',
+                  labelStyle: TextStyle(
+                      fontSize: 25,
+                      letterSpacing: 1,
+                      fontWeight: FontWeight.bold),
+                  fillColor: Colors.white,
+                  border: new OutlineInputBorder(
+                    borderRadius: new BorderRadius.circular(20.0),
+                  ),
+                ),
               ),
             ],
           )),
