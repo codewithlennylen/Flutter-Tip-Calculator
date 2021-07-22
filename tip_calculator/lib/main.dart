@@ -49,6 +49,9 @@ class _MyHomePageState extends State<MyHomePage> {
   // Stores the Latest Value of the tip percentage calculated.
   double _tipPercentage = defaultTipPercentage;
 
+  _getTipAmount() => _billAmount * _tipPercentage / 100;
+  _getTotalAmount() => _billAmount + _getTipAmount();
+
   //! Add Event Listeners
   @override
   void initState() {
@@ -130,8 +133,77 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                margin: EdgeInsets.all(15),
+                padding: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(15),
+                  ),
+                  border: Border.all(color: Colors.white),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      offset: Offset(2, 2),
+                      spreadRadius: 2,
+                      blurRadius: 1,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    AmountText(
+                      "Tip Amount: ${_getTipAmount()}",
+                      key: Key('tipAmount'),
+                    ),
+                    AmountText(
+                      "Total Amount: ${_getTotalAmount()}",
+                      key: Key('totalAmount'),
+                    ),
+                  ],
+                ),
+              )
             ],
           )),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    // To make sure we aren't leaking anything, dispose any used TextEditingController
+    // when this widget is cleared from memory
+    _billAmountController.dispose();
+    _tipPercentageController.dispose();
+    super.dispose();
+  }
+}
+
+//! Separate stateless widget to show the amounts
+// It won't contain any states but will depend on the value passed from the Stateful Widget
+class AmountText extends StatelessWidget {
+  final String text;
+
+  const AmountText(
+    this.text, {
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(8),
+      child: Text(
+        text.toUpperCase(),
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.blueAccent,
+          fontSize: 20,
         ),
       ),
     );
